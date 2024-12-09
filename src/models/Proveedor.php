@@ -1,29 +1,29 @@
 <?php
 // src/models/Proveedor.php
 
-require_once('../config/database.php');  // Incluye la conexión a la base de datos
+require_once('../config/database.php');
 
 class Proveedor {
     private $db;
 
-    // Constructor que establece la conexión con la base de datos
     public function __construct() {
         $this->db = connectDB();  // Llamada a la función de conexión
     }
 
     // Método para obtener la lista de proveedores
     public function listarProveedores() {
-        $sql = "SELECT * FROM proveedor";  // Consulta para obtener todos los proveedores
-        
-        // Ejecuta la consulta y obtiene los resultados
+        $sql = "SELECT * FROM proveedor";
         $result = $this->db->query($sql);
 
-        // Verifica si la consulta fue exitosa
+        // Depuración: Verificar si se obtuvieron resultados
         if ($result) {
-            return $result->fetchAll(PDO::FETCH_ASSOC);  // Devuelve todos los resultados como un array asociativo
+            $proveedores = $result->fetchAll(PDO::FETCH_ASSOC);
+            // Depuración: Verificar si los datos están siendo recuperados
+            var_dump($proveedores);
+            return $proveedores;
         }
-
-        return ('No hay'); // Si no hay resultados, devuelve null
+        
+        return null;  // Si no hay resultados, devuelve null
     }
 }
 ?>

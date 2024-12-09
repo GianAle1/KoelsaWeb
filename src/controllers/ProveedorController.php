@@ -5,21 +5,15 @@ require_once('../models/Proveedor.php');  // Incluye el modelo Proveedor
 
 class ProveedorController {
 
-    // Acción para mostrar la lista de proveedores
     public function listar() {
-        // Crear una instancia del modelo Proveedor
         $proveedorModel = new Proveedor();
+        $proveedores = $proveedorModel->listarProveedores();  // Obtiene los proveedores desde el modelo
 
-        // Obtener la lista de proveedores
-        $proveedores = $proveedorModel->listarProveedores();
-
-        // Verificar si se obtuvieron proveedores
+        // Verifica si se obtuvieron proveedores
         if ($proveedores) {
-            // Pasar los datos de los proveedores a la vista
-            require_once(__DIR__ . '../views/listado_proveedores.php');  // Cargar la vista
+            require_once(__DIR__ . '../views/listado_proveedores.php');  // Carga la vista y pasa los datos
         } else {
-            // Si no se encontraron proveedores, mostrar un mensaje
-            echo "No se encontraron proveedosssres.";
+            echo "No se encontraron proveedores.";
         }
     }
 }
