@@ -1,5 +1,4 @@
 <?php
-// src/controllers/UsuarioController.php
 require_once('./models/Usuario.php');
 
 class UsuarioController {
@@ -27,7 +26,7 @@ class UsuarioController {
             } else {
                 // Si las contraseñas no coinciden, muestra un error
                 $error = "Usuario o contraseña incorrectos";
-                include('../views/login.php');
+                include('./views/login.php');
             }
         } else {
             // Si no se envió el formulario, muestra la página de login

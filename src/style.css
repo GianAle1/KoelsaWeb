@@ -1,14 +1,48 @@
+/* assets/css/styles.css */
 
-/*Barra de navegacion*/
-    .navbar{
-        padding: 2rem;
-        background-color: #f5f6f7;
-    }
-    .navbar-collapse{
-       align-items: center;
-       justify-content: space-between;
-
-    }
+/* Asegura que el body y el html ocupen el 100% de la altura */
+body, html {
+    height: 100%;
+  }
+  
+  /* Centramos el formulario en la pantalla usando flexbox */
+  .form-signin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+  }
+  
+  /* Estilos para el formulario */
+  .form-signin form {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+  }
+  
+  /* Espacio entre los campos del formulario */
+  .form-signin .form-floating {
+    margin-bottom: 15px;
+  }
+  
+  /* Estilo para el botón de enviar */
+  .form-signin button {
+    width: 100%;
+  }
+  
+  /* Márgenes alrededor de la imagen */
+  .form-signin img {
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para el título */
+  .form-signin h1 {
+    margin-bottom: 20px;
+  }
+  
     .carousel-item img {
         width: 100%;
         height: 100%;
