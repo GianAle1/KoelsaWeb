@@ -9,10 +9,10 @@ if (isset($proveedores) && $proveedores) {
     // Mostrar los proveedores en la tabla
     foreach ($proveedores as $proveedor) {
         echo "<tr>";
-        echo "<td>" . htmlspecialchars($proveedor['nombre']) . "</td>";
-        echo "<td>" . htmlspecialchars($proveedor['direccion']) . "</td>";
-        echo "<td>" . htmlspecialchars($proveedor['telefono']) . "</td>";
-        echo "<td>" . htmlspecialchars($proveedor['correo']) . "</td>";
+        echo "<td>" . htmlspecialchars(trim($proveedor['nombre'])) . "</td>";
+        echo "<td>" . htmlspecialchars(trim($proveedor['direccion'])) . "</td>";
+        echo "<td>" . htmlspecialchars(trim($proveedor['telefono'])) . "</td>";
+        echo "<td>" . htmlspecialchars(trim($proveedor['correo'])) . "</td>";
         echo "</tr>";
     }
 
