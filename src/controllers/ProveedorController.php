@@ -8,16 +8,13 @@ class ProveedorController {
     public function listar() {
         $proveedorModel = new Proveedor();
         $proveedores = $proveedorModel->listarProveedores();  // Obtiene los proveedores desde el modelo
-    
-        // Depuración: Verificar los datos de proveedores
-        var_dump($proveedores);  // Muestra los datos para depurar
-    
+
+        // Verifica si se obtuvieron proveedores
         if ($proveedores) {
-            require_once(__DIR__ . '/../views/listado_proveedores.php');  // Carga la vista y pasa los datos
+            require_once(__DIR__ . '../views/listado_proveedores.php');  // Carga la vista y pasa los datos
         } else {
             echo "No se encontraron proveedores.";
         }
     }
-    
 }
 ?>

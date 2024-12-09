@@ -6,8 +6,8 @@ require_once('../config/database.php');
 class Proveedor {
     private $db;
 
-    public function __construct() {
-        $this->db = connectDB();  // Llamada a la función de conexión
+    public function __construct($db) {
+        $this->db = $db;
     }
 
     // Método para obtener la lista de proveedores
@@ -15,24 +15,22 @@ class Proveedor {
         $sql = "SELECT nombre, direccion, telefono, correo FROM proveedor";
         $result = $this->db->query($sql);
     
-        // Verificar si la consulta devuelve resultados
+        // Verificar si la consulta se ejecuta correctamente y tiene resultados
         if ($result) {
             $proveedores = $result->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Depuración: Verifica si se obtuvieron datos
             if (count($proveedores) > 0) {
                 return $proveedores;
             } else {
-                // Si no hay resultados, muestra un mensaje
-                echo "No hay proveedores en la base de datos.";
+                echo "No hay proveedores en la base de datos.";  // Para depuración
             }
         } else {
-            // Si no se ejecutó correctamente, muestra el error
+            // Si la consulta falla, mostrar el error
             echo "Error en la consulta SQL: " . implode(", ", $this->db->errorInfo());
         }
     
-        return null;  // Retorna null si no hay resultados
+        return null;
     }
+    
     
 }
 ?>
