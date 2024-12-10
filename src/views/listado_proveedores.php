@@ -1,23 +1,27 @@
 <?php
-// src/views/listado_proveedores.php
+// views/listado_proveedores.php
 
-if (isset($proveedores) && $proveedores) {
-    echo "<h2>Listado de Proveedores</h2>";
-    echo "<table border='1'>";
-    echo "<tr><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Correo</th></tr>";
-
-    // Mostrar los proveedores en la tabla
+if (!empty($proveedores)) {
+    echo "<h1>Listado de Proveedores</h1>";
+    echo "<table border='1'>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+            </tr>";
+    
     foreach ($proveedores as $proveedor) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars(trim($proveedor['nombre'])) . "</td>";
-        echo "<td>" . htmlspecialchars(trim($proveedor['direccion'])) . "</td>";
-        echo "<td>" . htmlspecialchars(trim($proveedor['telefono'])) . "</td>";
-        echo "<td>" . htmlspecialchars(trim($proveedor['correo'])) . "</td>";
-        echo "</tr>";
+        echo "<tr>
+                <td>" . htmlspecialchars($proveedor['id']) . "</td>
+                <td>" . htmlspecialchars($proveedor['nombre']) . "</td>
+                <td>" . htmlspecialchars($proveedor['direccion']) . "</td>
+                <td>" . htmlspecialchars($proveedor['telefono']) . "</td>
+              </tr>";
     }
 
     echo "</table>";
 } else {
-    echo "<p>No se encontraron proveedores.</p>";
+    echo "<p>No hay proveedores registrados.</p>";
 }
 ?>

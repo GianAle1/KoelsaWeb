@@ -1,37 +1,63 @@
 <?php
-require_once('./models/Usuario.php');
+// src/controllers/UsuarioController.php
+
+include_once __DIR__ . '/../models/Usuario.php';
 
 class UsuarioController {
 
-    public function login() {
-        // Verifica si los datos fueron enviados a través del formulario
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $_POST['email'];
+    // Acción para mostrar el formulario de login
+    public function login()
+    {
+        // Si ya está logueado, redirigir al controlador de proveedores
+        if (isset($_SESSION['usuario_id'])) {
+            header('Location: index.php?controller=Proveedor&action=listarProveedores');
+            exit;
+        }
+
+        // Mostrar la vista de login (la vista ya está incluida directamente en index.php)
+        include_once 'views/login.php';
+    }
+
+    // Acción para procesar el login
+    public function procesarLogin()
+    {
+        // Verifica si los datos fueron enviados por POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Obtener los datos del formulario
+            $correo = $_POST['correo'];
             $password = $_POST['password'];
 
-            // Crea un objeto Usuario
-            $usuario = new Usuario();
-            $usuario->setEmail($email);
-            $usuario->setPassword($password);
+            // Crear una instancia del modelo Usuario
+            $usuarioModel = new Usuario();
 
-            // Llama al modelo para obtener el usuario por correo
-            $user = $usuario->getUsuarioByEmail($email);
+            // Verificar si el usuario existe y la contraseña es correcta
+            $usuario = $usuarioModel->verificarUsuario($correo, $password);
 
-            if ($user && $user['contraseña'] == $password) {
-                // Si las contraseñas coinciden, redirige a la página de menú
-                session_start();
-                $_SESSION['user'] = $user;
-                header("Location: ./views/menu.php");
+            if ($usuario) {
+                // Si las credenciales son correctas, se guarda la sesión
+                $_SESSION['usuario_id'] = $usuario['id'];  // Guardar el ID del usuario en la sesión
+                $_SESSION['usuario_correo'] = $usuario['correo'];  // Guardar el correo del usuario en la sesión
+                header('Location: index.php?controller=Proveedor&action=listarProveedores');  // Redirigir al listado de proveedores
                 exit;
             } else {
-                // Si las contraseñas no coinciden, muestra un error
-                $error = "Usuario o contraseña incorrectos";
-                include('./views/login.php');
+                // Si las credenciales son incorrectas, redirigir con un mensaje de error
+                $error = 'Correo o contraseña incorrectos';
+                include_once 'views/login.php';  // Volver a mostrar el formulario de login
             }
         } else {
-            // Si no se envió el formulario, muestra la página de login
-            include('./views/login.php');
+            // Si no es un POST, redirigir al login
+            header('Location: index.php?controller=Usuario&action=login');
+            exit;
         }
+    }
+
+    // Acción para cerrar sesión
+    public function logout()
+    {
+        session_start();
+        session_destroy();  // Eliminar la sesión
+        header('Location: index.php?controller=Usuario&action=login');  // Redirigir al login
+        exit;
     }
 }
 ?>

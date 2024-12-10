@@ -1,37 +1,26 @@
 <?php
-// src/models/Proveedor.php
+// models/Proveedor.php
 
-require_once('../config/database.php');
+class Proveedor
+{
+    private $conn;
 
-class Proveedor {
-    private $db;
-
-    public function __construct($db) {
-        $this->db = $db;
+    // Constructor para la conexión a la base de datos
+    public function __construct($db)
+    {
+        $this->conn = $db;
     }
 
-    // Método para obtener la lista de proveedores
-    public function listarProveedores() {
-        $sql = "SELECT nombre, direccion, telefono, correo FROM proveedor";
-        $result = $this->db->query($sql);
-    
-        // Verificar si la consulta se ejecuta correctamente y tiene resultados
-        if ($result) {
-            $proveedores = $result->fetchAll(PDO::FETCH_ASSOC);
-            if (count($proveedores) > 0) {
-                return $proveedores;
-            } else {
-                echo "No hay proveedores en la base de datos.";  // Para depuración
-            }
-        } else {
-            // Si la consulta falla, mostrar el error
-            echo "Error en la consulta SQL: " . implode(", ", $this->db->errorInfo());
-        }
-    
-        return null;
+    // Método para obtener todos los proveedores
+    public function obtenerProveedores()
+    {
+        $query = "SELECT * FROM proveedores";  // Asegúrate de que el nombre de la tabla sea correcto
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        // Retornar todos los proveedores en un array
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
 }
 ?>
 

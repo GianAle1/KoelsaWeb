@@ -1,30 +1,33 @@
 <?php
 // src/models/Usuario.php
-require_once('./config/database.php');
+
+// Incluir la clase Database desde la carpeta config
+include_once __DIR__ . '/../config/database.php';  // Ruta correcta
 
 class Usuario {
+    private $conn;
 
-    private $email;
-    private $password;
-
-    // Métodos setters y getters para los atributos
-    public function setEmail($email) {
-        $this->email = $email;
+    public function __construct() {
+        $this->conn = connectDB(); // Conexión a la base de datos
     }
 
-    public function setPassword($password) {
-        $this->password = $password;
-    }
-
-    // Método para obtener el usuario por su email
-    public function getUsuarioByEmail($email) {
-        $pdo = connectDB(); // Establece la conexión con la base de datos
-        $stmt = $pdo->prepare("SELECT * FROM usuario WHERE correo = :correo");
-        $stmt->bindParam(':correo', $email);
+    public function verificarUsuario($correo, $password) {
+        // Consulta para obtener el usuario por su correo
+        $query = "SELECT * FROM usuario WHERE correo = :correo"; 
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Retorna el usuario
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuario) {
+            // Comparar la contraseña almacenada (en texto plano) con la recibida
+            if ($password === $usuario['contraseña']) {  // Comparación directa
+                return $usuario;  // Contraseña correcta
+            }
+        }
+
+        return false;  // Si no existe el usuario o la contraseña es incorrecta
     }
 }
-
 ?>

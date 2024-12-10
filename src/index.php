@@ -1,36 +1,91 @@
 <?php
 // src/index.php
 session_start();
-// Obtiene los parámetros controller y action de la URL, con valores predeterminados
-$controllerName = isset($_GET['controller']) ? ucfirst(strtolower($_GET['controller'])) : 'Usuario'; // Por defecto el controlador es 'Usuario'
-$actionName = isset($_GET['action']) ? $_GET['action'] : 'login'; // Por defecto la acción es 'login'
-// Construye el nombre completo del archivo del controlador
-$controllerFile = __DIR__ . '/controllers/' . $controllerName . 'Controller.php';
-try {
-    // Verifica si el archivo del controlador existe
-    if (file_exists($controllerFile)) {
-        require_once $controllerFile; // Incluye el controlador
-    } else {
-        throw new Exception("Controlador no encontrado: " . $controllerName); // Error si no se encuentra el controlador
-    }
-    // Construye el nombre completo de la clase del controlador
-    $controllerClass = $controllerName . 'Controller';
 
-    // Verifica si la clase existe
-    if (!class_exists($controllerClass)) {
-        throw new Exception("Clase del controlador no encontrada: " . $controllerClass); // Error si la clase no existe
-    }
-
-    // Instancia del controlador
-    $controller = new $controllerClass();
-    // Verifica si el método (acción) existe en el controlador
-    if (method_exists($controller, $actionName)) {
-        $controller->$actionName();  // Ejecuta la acción
-    } else {
-        throw new Exception("Acción no encontrada en el controlador: " . $actionName); // Error si no existe la acción
-    }
-} catch (Exception $e) {
-    // Muestra el mensaje de error de manera amigable
-    echo "<h1>Error</h1>";
-    echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
+// Si ya está logueado, redirigir al controlador de proveedores
+if (isset($_SESSION['usuario_id'])) {
+    header('Location: index.php?controller=Proveedor&action=listarProveedores');
+    exit;
 }
+
+// Si el formulario fue enviado (POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtener las credenciales del formulario
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Incluir el modelo de Usuario para verificar las credenciales
+    include_once 'models/Usuario.php';
+    $usuarioModel = new Usuario();
+
+    // Verificar el usuario
+    $usuario = $usuarioModel->verificarUsuario($email, $password);
+
+    if ($usuario) {
+        // Si las credenciales son correctas, almacenar el ID del usuario en la sesión
+        $_SESSION['usuario_id'] = $usuario['idusuario'];
+
+        // Redirigir a la lista de proveedores
+        header('Location: index.php?controller=Proveedor&action=listarProveedores');
+        exit;
+    } else {
+        // Si las credenciales no son correctas, mostrar un mensaje de error
+        $error = "Credenciales incorrectas.";
+    }
+}
+?>
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Enlace al archivo CSS externo -->
+    <link href="style.css" rel="stylesheet">
+
+  </head>
+  <body class="text-center">
+
+    <main class="form-signin">
+        <form method="POST" action="index.php">
+        <img class="mb-4" src="views/image/koelsa.png" alt="" width="200" height="200">
+
+            <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
+
+            <!-- Muestra el error si las credenciales no son correctas -->
+            <?php if (isset($error)): ?>
+                <p class="text-danger"><?= $error ?></p>
+            <?php endif; ?>
+
+            <!-- Campo de email -->
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="nombre@dominio.com" required>
+                <label for="floatingInput">Correo electrónico</label>
+            </div>
+
+            <!-- Campo de contraseña -->
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Contraseña" required>
+                <label for="floatingPassword">Contraseña</label>
+            </div>
+
+            <!-- Recordarme checkbox -->
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Recordarme
+                </label>
+            </div>
+
+            <!-- Botón de enviar -->
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2024</p>
+        </form>
+    </main>
+
+  </body>
+</html>
