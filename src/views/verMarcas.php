@@ -1,12 +1,12 @@
 <?php
-// views/verMarcas.php
+// Incluir el controlador y el modelo
+include_once '../controllers/MarcaController.php';
 
-// Incluir el modelo Marca
-require_once '../models/Marca.php';
+// Crear una instancia del controlador
+$marcaController = new MarcaController();
 
-// Obtener la lista de marcas
-$marca = new Marca();
-$marcas = $marca->obtenerMarcas();
+// Llamar al método para obtener las marcas
+$marcas = $marcaController->ver(); // Esto ahora obtiene las marcas correctamente
 ?>
 
 <!DOCTYPE html>
@@ -17,29 +17,34 @@ $marcas = $marca->obtenerMarcas();
     <title>Ver Marcas</title>
 </head>
 <body>
-    <h2>Lista de Marcas</h2>
-
-    <a href="menu.php">Volver al menú</a>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($marcas): ?>
+    <h2>Listado de Marcas</h2>
+    <a href="registrarMarca.php">Registrar nueva marca</a>
+    
+    <!-- Verificar si hay marcas -->
+    <?php if (!empty($marcas)): ?>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
                 <?php foreach ($marcas as $marca): ?>
                     <tr>
+                        <td><?php echo $marca['idmarca']; ?></td>
                         <td><?php echo $marca['nombre']; ?></td>
+                        <td>
+                            <a href="../controllers/MarcaController.php?accion=editar&idmarca=<?php echo $marca['idmarca']; ?>">Editar</a> |
+                            <a href="../controllers/MarcaController.php?accion=eliminar&idmarca=<?php echo $marca['idmarca']; ?>">Eliminar</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="1">No hay marcas registradas.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No hay marcas disponibles.</p>
+    <?php endif; ?>
 </body>
 </html>

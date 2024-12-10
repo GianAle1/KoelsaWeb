@@ -25,10 +25,19 @@ $usuario = $_SESSION['usuario'];
     <!-- Opciones del menú -->
     <h3>Opciones</h3>
     <ul>
+        <!-- Sección de Marcas -->
         <li><a href="registrarMarca.php">Registrar marca</a></li>
         <li><a href="verMarcas.php">Ver marcas</a></li>
+
+        <!-- Sección de Proveedores -->
         <li><a href="register_proveedor.php">Registrar proveedor</a></li>
         <li><a href="view_proveedores.php">Ver proveedores</a></li>
+
+        <!-- Sección de Productos -->
+        <li><a href="crear_producto.php">Registrar producto</a></li>
+        <li><a href="ver_productos.php">Ver productos</a></li>
+        <li><a href="actualizar_producto.php">Actualizar producto</a></li>
+        <li><a href="eliminar_producto.php">Eliminar producto</a></li>
     </ul>
 
     <!-- Enlace para cerrar sesión -->
