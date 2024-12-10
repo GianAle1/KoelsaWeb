@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Obtener los datos del usuario
+// Obtener los datos del usuario desde la sesión
 $usuario = $_SESSION['usuario'];
 ?>
 
@@ -25,10 +25,13 @@ $usuario = $_SESSION['usuario'];
     <!-- Opciones del menú -->
     <h3>Opciones</h3>
     <ul>
+        <li><a href="registrarMarca.php">Registrar marca</a></li>
+        <li><a href="verMarcas.php">Ver marcas</a></li>
         <li><a href="register_proveedor.php">Registrar proveedor</a></li>
         <li><a href="view_proveedores.php">Ver proveedores</a></li>
     </ul>
 
+    <!-- Enlace para cerrar sesión -->
     <a href="logout.php">Cerrar sesión</a>
 </body>
 </html>
