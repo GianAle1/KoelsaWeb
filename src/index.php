@@ -2,10 +2,10 @@
 // src/index.php
 session_start();
 
-// Si ya está logueado, redirigir al controlador de proveedores
-if (isset($_SESSION['usuario_id'])) {
+// Si ya está logueado y está intentando acceder a la página de login, redirigir a la lista de proveedores
+if (isset($_SESSION['usuario_id']) && $_GET['controller'] !== 'Proveedor') {
     header('Location: index.php?controller=Proveedor&action=listarProveedores');
-    exit;
+    exit; // Detiene la ejecución para evitar que se redirija nuevamente
 }
 
 // Si el formulario fue enviado (POST)
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($usuario) {
         // Si las credenciales son correctas, almacenar el ID del usuario en la sesión
-        $_SESSION['usuario_id'] = $usuario['idusuario'];
+        $_SESSION['usuario_id'] = $usuario['id'];
 
         // Redirigir a la lista de proveedores
         header('Location: index.php?controller=Proveedor&action=listarProveedores');
@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Credenciales incorrectas.";
     }
 }
+
 ?>
 
 <!doctype html>
