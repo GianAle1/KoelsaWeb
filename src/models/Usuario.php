@@ -1,33 +1,27 @@
 <?php
-// src/models/Usuario.php
+// models/Usuario.php
 
-// Incluir la clase Database desde la carpeta config
-include_once __DIR__ . '/../config/database.php';  // Ruta correcta
+require_once 'config/database.php';
 
 class Usuario {
-    private $conn;
+    public function verificarUsuario($correo, $contraseña) {
+        // Conexión a la base de datos
+        $conn = connectDB();
 
-    public function __construct() {
-        $this->conn = connectDB(); // Conexión a la base de datos
-    }
-
-    public function verificarUsuario($correo, $password) {
-        // Consulta para obtener el usuario por su correo
-        $query = "SELECT * FROM usuario WHERE correo = :correo"; 
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':correo', $correo);
+        // Preparar la consulta para seleccionar el usuario por correo
+        $stmt = $conn->prepare("SELECT idusuario, nombre, apellidos, correo, contraseña FROM usuario WHERE correo = ?");
+        $stmt->bindParam(1, $correo, PDO::PARAM_STR);
         $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($usuario) {
-            // Comparar la contraseña almacenada (en texto plano) con la recibida
-            if ($password === $usuario['contraseña']) {  // Comparación directa
-                return $usuario;  // Contraseña correcta
-            }
+        // Verificar si el usuario existe y si la contraseña es correcta
+        if ($result && $contraseña == $result['contraseña']) {
+            // Si las credenciales son correctas, almacenar la información en la sesión
+            $_SESSION['usuario'] = $result;
+            return true;
         }
 
-        return false;  // Si no existe el usuario o la contraseña es incorrecta
+        return false;  // Si las credenciales son incorrectas
     }
 }
 ?>

@@ -1,26 +1,36 @@
 <?php
 // models/Proveedor.php
 
-class Proveedor
-{
-    private $conn;
+require_once '../config/database.php';
 
-    // Constructor para la conexión a la base de datos
-    public function __construct($db)
-    {
-        $this->conn = $db;
+class Proveedor {
+    
+    // Función para registrar un proveedor
+    public function registrarProveedor($nombre, $direccion, $telefono, $correo) {
+        // Conexión a la base de datos
+        $conn = connectDB();
+
+        // Preparar la consulta para insertar el proveedor
+        $stmt = $conn->prepare("INSERT INTO proveedor (nombre, direccion, telefono, correo) VALUES (?, ?, ?, ?)");
+        $stmt->bindParam(1, $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(2, $direccion, PDO::PARAM_STR);
+        $stmt->bindParam(3, $telefono, PDO::PARAM_STR);
+        $stmt->bindParam(4, $correo, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        return $stmt->execute();
     }
 
-    // Método para obtener todos los proveedores
-    public function obtenerProveedores()
-    {
-        $query = "SELECT * FROM proveedores";  // Asegúrate de que el nombre de la tabla sea correcto
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
+    // Función para obtener todos los proveedores
+    public function obtenerProveedores() {
+        // Conexión a la base de datos
+        $conn = connectDB();
 
-        // Retornar todos los proveedores en un array
+        // Preparar la consulta para obtener todos los proveedores
+        $stmt = $conn->query("SELECT * FROM proveedor");
+
+        // Ejecutar la consulta y retornar los resultados
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>
-

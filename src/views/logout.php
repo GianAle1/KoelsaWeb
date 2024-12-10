@@ -1,6 +1,8 @@
-// src/views/logout.php
 <?php
+// logout.php
 session_start();
-session_destroy();
-header("Location: login.php");
-exit;
+session_unset();  // Elimina todas las variables de sesión
+session_destroy();  // Destruye la sesión
+header("Location: ../index.php");  // Redirige al login
+exit();
+?>
