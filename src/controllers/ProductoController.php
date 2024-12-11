@@ -18,5 +18,11 @@ class ProductoController {
         $producto = new Producto();
         return $producto->obtenerPorId($idproducto);
     }
+    
+    public function actualizarCantidad($idproducto, $nuevaCantidad) {
+        $producto = new Producto();
+        return $producto->actualizarCantidadPorId($idproducto, $nuevaCantidad);
+    }
+    
 }
 ?>

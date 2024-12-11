@@ -65,6 +65,25 @@ public function obtenerPorId($idproducto) {
     }
 }
 
+public function actualizarCantidadPorId($idproducto, $cantidad) {
+    try {
+        // Consulta para actualizar la cantidad
+        $sql = "UPDATE producto SET cantidad = :cantidad WHERE idproducto = :idproducto";
+
+        // Preparar la consulta
+        $stmt = $this->conexion->prepare($sql);
+
+        // Vincular parámetros
+        $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
+        $stmt->bindParam(':idproducto', $idproducto, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error al actualizar la cantidad: " . $e->getMessage();
+        return false;
+    }
+}
 
 
 
