@@ -39,35 +39,31 @@ class Producto {
 
     // src/models/Producto.php
 
-public function actualizarProducto($idproducto, $codigo, $descripcion, $idmarca, $undMedida, $cantidad, $idproveedor, $idalmacen) {
+public function obtenerPorId($idproducto) {
     try {
-        $sql = "UPDATE producto SET 
-                    codigo = :codigo,
-                    descripcion = :descripcion,
-                    idmarca = :idmarca,
-                    undMedida = :undMedida,
-                    cantidad = :cantidad,
-                    idproveedor = :idproveedor,
-                    idalmacen = :idalmacen
-                WHERE idproducto = :idproducto";
-
+        $sql = "SELECT 
+                    p.ruta,
+                    p.idproducto,
+                    p.codigo,
+                    p.descripcion,
+                    m.nombre AS marca,
+                    pr.nombre AS proveedor,
+                    a.nombre AS almacen,
+                    p.undMedida,
+                    p.cantidad
+                FROM producto p
+                JOIN marca m ON p.idmarca = m.idmarca
+                JOIN proveedor pr ON p.idproveedor = pr.idproveedor
+                JOIN almacen a ON p.idalmacen = a.idalmacen WHERE idproducto = :idproducto";
         $stmt = $this->conexion->prepare($sql);
-        $stmt->bindParam(':codigo', $codigo);
-        $stmt->bindParam(':descripcion', $descripcion);
-        $stmt->bindParam(':idmarca', $idmarca);
-        $stmt->bindParam(':undMedida', $undMedida);
-        $stmt->bindParam(':cantidad', $cantidad);
-        $stmt->bindParam(':idproveedor', $idproveedor);
-        $stmt->bindParam(':idalmacen', $idalmacen);
-        $stmt->bindParam(':idproducto', $idproducto);
-
-        return $stmt->execute();
+        $stmt->bindParam(':idproducto', $idproducto, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        echo "Error al actualizar el producto: " . $e->getMessage();
+        echo "Error al obtener el producto: " . $e->getMessage();
         return false;
     }
 }
-
 
 
 

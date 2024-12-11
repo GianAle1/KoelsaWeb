@@ -1,10 +1,12 @@
 <?php
-// Incluir el modelo de Proveedor
-require_once '../models/Proveedor.php';
+// Incluir el controlador y el modelo
+include_once '../controllers/MarcaController.php';
 
-// Obtener la lista de proveedores
-$proveedor = new Proveedor();
-$proveedores = $proveedor->obtenerProveedores();
+// Crear una instancia del controlador
+$marcaController = new MarcaController();
+
+// Llamar al método para obtener las marcas
+$marcas = $marcaController->ver(); // Esto ahora obtiene las marcas correctamente
 ?>
 
 <!DOCTYPE html>
@@ -12,38 +14,58 @@ $proveedores = $proveedor->obtenerProveedores();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Proveedores</title>
+    <title>Ver Marcas</title>
+
+    <!-- Incluir Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Lista de Proveedores</h2>
 
-    <a href="menu.php">Volver al menú</a>
+    <!-- Contenedor principal -->
+    <div class="container mt-5">
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($proveedores): ?>
-                <?php foreach ($proveedores as $proveedor): ?>
+        <!-- Título -->
+        <h2 class="text-center mb-4">Listado de Marcas</h2>
+
+        <!-- Botón para registrar nueva marca -->
+        <div class="mb-3 text-end">
+            <a href="registrarMarca.php" class="btn btn-primary">Registrar nueva marca</a>
+        </div>
+
+        <!-- Verificar si hay marcas -->
+        <?php if (!empty($marcas)): ?>
+            <!-- Tabla de marcas -->
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <td><?php echo $proveedor['nombre']; ?></td>
-                        <td><?php echo $proveedor['direccion']; ?></td>
-                        <td><?php echo $proveedor['telefono']; ?></td>
-                        <td><?php echo $proveedor['correo']; ?></td>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="4">No hay proveedores registrados.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($marcas as $marca): ?>
+                        <tr>
+                            <td><?php echo $marca['idmarca']; ?></td>
+                            <td><?php echo $marca['nombre']; ?></td>
+                            <td>
+                                <!-- Botones de acción -->
+                                <a href="../controllers/MarcaController.php?accion=editar&idmarca=<?php echo $marca['idmarca']; ?>" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="../controllers/MarcaController.php?accion=eliminar&idmarca=<?php echo $marca['idmarca']; ?>" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <div class="alert alert-warning" role="alert">
+                No hay marcas disponibles.
+            </div>
+        <?php endif; ?>
+
+    </div>
+
+    <!-- Incluir Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

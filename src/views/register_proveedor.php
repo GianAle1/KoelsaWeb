@@ -30,28 +30,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Proveedor</title>
+
+    <!-- Incluir Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Registrar Proveedor</h2>
 
-    <?php if (isset($error)): ?>
-        <p style="color: red;"><?php echo $error; ?></p>
-    <?php endif; ?>
+    <!-- Contenedor principal -->
+    <div class="container mt-5">
 
-    <form method="POST" action="register_proveedor.php">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <br>
-        <label for="direccion">Dirección:</label>
-        <input type="text" id="direccion" name="direccion">
-        <br>
-        <label for="telefono">Teléfono:</label>
-        <input type="text" id="telefono" name="telefono">
-        <br>
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo">
-        <br>
-        <button type="submit">Registrar</button>
-    </form>
+        <!-- Título -->
+        <h2 class="text-center mb-4">Registrar Proveedor</h2>
+
+        <!-- Mostrar error si ocurre alguno -->
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Formulario de registro -->
+        <form method="POST" action="register_proveedor.php">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="direccion" name="direccion">
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono:</label>
+                <input type="text" class="form-control" id="telefono" name="telefono">
+            </div>
+
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo:</label>
+                <input type="email" class="form-control" id="correo" name="correo">
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Registrar</button>
+            </div>
+        </form>
+
+        <!-- Enlace para ver los proveedores -->
+        <div class="mt-3 text-center">
+            <a href="view_proveedores.php" class="btn btn-secondary">Ver Proveedores</a>
+        </div>
+
+    </div>
+
+    <!-- Incluir Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

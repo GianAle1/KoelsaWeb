@@ -1,12 +1,12 @@
 <?php
-// Incluir el controlador y el modelo
+// Incluir el controlador de productos
 include_once '../controllers/ProductoController.php';
 
 // Crear una instancia del controlador
 $productoController = new ProductoController();
 
 // Llamar al método para obtener los productos
-$productos = $productoController->leer(); // Ahora obtendrás los productos correctamente
+$productos = $productoController->leer();
 ?>
 
 <!DOCTYPE html>
@@ -14,45 +14,55 @@ $productos = $productoController->leer(); // Ahora obtendrás los productos corr
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Productos</title>
+    <title>Lista de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Productos</h2>
 
-    <!-- Verificar si hay productos -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Lista de Productos</h2>
+
     <?php if (empty($productos)): ?>
-        <p>No hay productos disponibles.</p>
+        <div class="alert alert-warning" role="alert">
+            No hay productos disponibles.
+        </div>
     <?php else: ?>
-        <table border="1">
-            <tr>
-                <th>ID Producto</th>
-                <th>Código</th>
-                <th>Descripción</th>
-                <th>Marca</th>
-                <th>Unidad de Medida</th>
-                <th>Cantidad</th>
-                <th>Proveedor</th>
-                <th>Almacén</th>
-                <th>Acciones</th>
-            </tr>
-            <?php foreach ($productos as $producto): ?>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="table-dark">
                 <tr>
-                    <td><?php echo $producto['idproducto']; ?></td>
-                    <td><?php echo $producto['codigo']; ?></td>
-                    <td><?php echo $producto['descripcion']; ?></td>
-                    <td><?php echo $producto['marca']; ?></td>
-                    <td><?php echo $producto['undMedida']; ?></td>
-                    <td><?php echo $producto['cantidad']; ?></td>
-                    <td><?php echo $producto['proveedor']; ?></td>
-                    <td><?php echo $producto['almacen']; ?></td>
-                    <td>
-                        <!-- Agregar acciones como editar o eliminar -->
-                        <a href="editar_producto.php?id=<?php echo $producto['idproducto']; ?>">Editar</a> |
-                        <a href="eliminar_producto.php?id=<?php echo $producto['idproducto']; ?>">Eliminar</a>
-                    </td>
+                    <th>ID Producto</th>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Marca</th>
+                    <th>Unidad de Medida</th>
+                    <th>Cantidad</th>
+                    <th>Proveedor</th>
+                    <th>Almacén</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($productos as $producto): ?>
+                    <tr>
+                        <td><?php echo $producto['idproducto']; ?></td>
+                        <td><?php echo $producto['codigo']; ?></td>
+                        <td><?php echo $producto['descripcion']; ?></td>
+                        <td><?php echo $producto['marca']; ?></td>
+                        <td><?php echo $producto['undMedida']; ?></td>
+                        <td><?php echo $producto['cantidad']; ?></td>
+                        <td><?php echo $producto['proveedor']; ?></td>
+                        <td><?php echo $producto['almacen']; ?></td>
+                        <td>
+                            <!-- Botón Ver Producto -->
+                            <a href="ver_detalle_producto.php?id=<?php echo $producto['idproducto']; ?>" class="btn btn-info btn-sm">Ver Producto</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
         </table>
     <?php endif; ?>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -35,33 +35,62 @@ class MarcaController {
         }
     }
 
-    // Método para obtener una marca específica para editarla
+    // Método para editar una marca
     public function editar($idmarca) {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+    
+        // Crear una instancia del modelo Marca
         $marca = new Marca();
+    
+        // Obtener los datos de la marca desde el modelo
         $marcaData = $marca->obtenerMarcaPorId($idmarca);
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+        // Verificar si la marca existe
+        if (!$marcaData) {
+            // Si no se encuentra la marca, redirigir a la lista de marcas
+            header("Location: ../views/verMarcas.php"); // Cambié la redirección para que funcione correctamente
+            exit();
+        }
+    
+        // Si se recibe el formulario de actualización (POST)
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'editar') {
+            // Recibir el nuevo nombre de la marca desde el formulario
             $nombre = $_POST['nombre'];
+    
+            // Llamar al método para actualizar la marca en la base de datos
             if ($marca->actualizarMarca($idmarca, $nombre)) {
+                // Si la actualización fue exitosa, redirigir a la lista de marcas
                 header("Location: ../views/verMarcas.php");
                 exit();
             } else {
+                // Si hubo un error al actualizar, mostrar mensaje de error
                 echo "Error al actualizar la marca.";
             }
         }
-
-        include_once '../views/actualizarMarca.php'; // Mostrar el formulario de edición
+    
+        // Si no se envió el formulario, mostrar el formulario de edición con los datos de la marca
+        include_once '../views/actualizarMarca.php';  // Pasar los datos de la marca a la vista
     }
-
-    // Método para eliminar una marca
+    
     public function eliminar($idmarca) {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+    
+        // Crear una instancia del modelo Marca
         $marca = new Marca();
+    
+        // Llamar al método para eliminar la marca en la base de datos
         if ($marca->eliminarMarca($idmarca)) {
+            // Si la eliminación fue exitosa, redirigir a la lista de marcas
             header("Location: ../views/verMarcas.php");
             exit();
         } else {
+            // Si hubo un error al eliminar, mostrar mensaje de error
             echo "Error al eliminar la marca.";
         }
     }
+    
 }
+
 ?>
